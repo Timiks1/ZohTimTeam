@@ -1,0 +1,12 @@
+.table1 {
+    border-collapse: collapse;
+    width: 100%;
+}
+.th1, .td1 {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+.th1 {
+    background-color: #f2f2f2;
+}

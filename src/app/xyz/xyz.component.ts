@@ -1,6 +1,6 @@
 import { Component ,OnInit} from '@angular/core';
 // import {NgbConfig} from '@ng-bootstrap/ng-bootstrap';
-import{SliderComponent} from '../slider/slider.component';
+import {FruitsComponent} from '../fruits/fruits.component';
 @Component({
   selector: 'app-root',
   templateUrl: './xyz.component.html',
