@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { parse } from 'date-fns';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-fruits',
