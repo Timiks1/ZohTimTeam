@@ -1,68 +1,23 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { parse } from 'date-fns';
 
 @Component({
   selector: 'app-fruits',
-
-  template: `  <style>
-  table {
-      border-collapse: collapse;
-      width: 100%;
-  }
-  th, td {
-      border: 1px solid black;
-      padding: 8px;
-      text-align: left;
-  }
-  th {
-      background-color: #f2f2f2;
-  }
-  tr:hover {
-    background-color: red;
-}
-</style>
-
-<input type="text" id="searchInput" (keyup)="filterTable($event)" placeholder="Поиск...">
-<table>
-    <thead>
-        <tr>
-            <th>№</th>
-            <th>Фрукт</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of filteredItems">
-            <td>{{item.num}}</td>
-            <td>{{item.name}}</td>
-        </tr>
-    </tbody>
-</table>`
+  templateUrl: './fruits.component.html',
+  styleUrls: ['./fruits.component.css']
 })
 export class FruitsComponent {
-  items: Fruit[] = [
-    { num: 1, name: 'Яблоко' },
-    { num: 2, name: 'Банан' },
-    { num: 3, name: 'Апельсин' },
-    { num: 4, name: 'Груша' },
-    { num: 5, name: 'Вишня' }
-  ];
+  public result : string | undefined;
+  constructor(private http: HttpClient) {}
 
-  filterText = '';
-  filteredItems: Fruit[] = [];
-  filterTable(event: Event) {
-    this.filterText = (event.target as HTMLInputElement).value;
-    this.filteredItems = this.items.filter(item => {
-      return item.name.toUpperCase().includes(this.filterText.toUpperCase());
-    });
-  }
-  
-
-}
-// <li *ngFor="let item of items">{{item}}</li>
-class Fruit {
-  public name : string;
-  public num : Number;
-  constructor(name : string, num : Number){
-    this.name = name;
-    this.num = num;
+  onDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const dateString = input.value;
+    const date = parse(dateString, 'yyyy-MM-dd', new Date());
+    console.log(date);
+    const apiUrl = `http://localhost:3000/fruits?date=${date}`;
+    this.http.get(apiUrl).subscribe((data) => console.log(data));
+    // this.result = "tttttt";
   }
 }
