@@ -1,68 +1,36 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+interface HoroscopeData {
+  horoscope: string;
+}
 
 @Component({
   selector: 'app-fruits',
-
-  template: `  <style>
-  table {
-      border-collapse: collapse;
-      width: 100%;
-  }
-  th, td {
-      border: 1px solid black;
-      padding: 8px;
-      text-align: left;
-  }
-  th {
-      background-color: #f2f2f2;
-  }
-  tr:hover {
-    background-color: red;
-}
-</style>
-
-<input type="text" id="searchInput" (keyup)="filterTable($event)" placeholder="Поиск...">
-<table>
-    <thead>
-        <tr>
-            <th>№</th>
-            <th>Фрукт</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of filteredItems">
-            <td>{{item.num}}</td>
-            <td>{{item.name}}</td>
-        </tr>
-    </tbody>
-</table>`
+  templateUrl: './fruits.component.html',
+  styleUrls: ['./fruits.component.css']
 })
 export class FruitsComponent {
-  items: Fruit[] = [
-    { num: 1, name: 'Яблоко' },
-    { num: 2, name: 'Банан' },
-    { num: 3, name: 'Апельсин' },
-    { num: 4, name: 'Груша' },
-    { num: 5, name: 'Вишня' }
-  ];
+  public result: string | undefined;
 
-  filterText = '';
-  filteredItems: Fruit[] = [];
-  filterTable(event: Event) {
-    this.filterText = (event.target as HTMLInputElement).value;
-    this.filteredItems = this.items.filter(item => {
-      return item.name.toUpperCase().includes(this.filterText.toUpperCase());
-    });
-  }
-  
+  constructor(private http: HttpClient) {}
 
-}
-// <li *ngFor="let item of items">{{item}}</li>
-class Fruit {
-  public name : string;
-  public num : Number;
-  constructor(name : string, num : Number){
-    this.name = name;
-    this.num = num;
+  onDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const dateParts = input.value.split('-');
+    const year = Number(dateParts[0]);
+    const month = Number(dateParts[1]) - 1; // JS months are zero-based
+    const day = Number(dateParts[2]);
+
+    const url = `http://localhost:3000/api/fruits/${year}-${month+1}-${day}`;
+    this.http.get<HoroscopeData>(url).subscribe(
+      (data) => {
+        this.result = data.horoscope;
+        console.log('got');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }
